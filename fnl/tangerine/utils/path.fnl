@@ -9,19 +9,19 @@
 ;; -------------------- ;;
 ;;        UTILS         ;;
 ;; -------------------- ;;
-(local windows? (= _G.jit.os "Windows"))
+(local win32? (= _G.jit.os "Windows"))
+(macro path-unify! [sub-sym]
+  `(if win32?
+    (: ,sub-sym :gsub "\\" "/")
+    ,sub-sym))
 
 (lambda p.match [path pattern]
   "matches 'path' against 'pattern' with support for windows."
-  (if windows?
-    (path:match (pattern:gsub "/" "[\\/]"))
-    (path:match pattern)))
+  (: (path-unify! path) :match pattern))
 
 (lambda p.gsub [path pattern repl]
   "substitutes 'pattern' in 'path' for 'repl' with support for windows."
-  (if windows?
-    (path:gsub (pattern:gsub "/" "[\\/]") repl)
-    (path:gsub pattern repl)))
+  (: (path-unify! path) :gsub pattern repl))
 
 (lambda p.shortname [path]
   "shortens absolute 'path' for better readability."
@@ -45,9 +45,9 @@
 
 (lambda p.transform-path [path [key1 ext1] [key2 ext2]]
   "changes path's parent dir and extension."
-  (let [from (.. "^" (esc-regex (env.get key1)))
-        to   (esc-regex (env.get key2))
-        path (path:gsub (.. "%." ext1 "$") (.. "." ext2))]
+  (let [from (path-unify! (.. "^" (esc-regex (env.get key1))))
+        to   (path-unify! (esc-regex (env.get key2)))
+        path (path-unify! (path:gsub (.. "%." ext1 "$") (.. "." ext2)))]
        (if (path:find from)
            (path:gsub from to)
            (p.gsub path (.. "/" ext1 "/") (.. "/" ext2 "/")))))

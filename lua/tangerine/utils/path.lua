@@ -1,24 +1,28 @@
 local env = require("tangerine.utils.env")
 local p = {}
-local windows_3f = (_G.jit.os == "Windows")
+local win32_3f = (_G.jit.os == "Windows")
 p.match = function(path, pattern)
-  _G.assert((nil ~= pattern), "Missing argument pattern on fnl/tangerine/utils/path.fnl:14")
-  _G.assert((nil ~= path), "Missing argument path on fnl/tangerine/utils/path.fnl:14")
-  if windows_3f then
-    return path:match(pattern:gsub("/", "[\\/]"))
+  _G.assert((nil ~= pattern), "Missing argument pattern on fnl/tangerine/utils/path.fnl:18")
+  _G.assert((nil ~= path), "Missing argument path on fnl/tangerine/utils/path.fnl:18")
+  local _1_
+  if win32_3f then
+    _1_ = path:gsub("\\", "/")
   else
-    return path:match(pattern)
+    _1_ = path
   end
+  return _1_:match(pattern)
 end
 p.gsub = function(path, pattern, repl)
-  _G.assert((nil ~= repl), "Missing argument repl on fnl/tangerine/utils/path.fnl:20")
-  _G.assert((nil ~= pattern), "Missing argument pattern on fnl/tangerine/utils/path.fnl:20")
-  _G.assert((nil ~= path), "Missing argument path on fnl/tangerine/utils/path.fnl:20")
-  if windows_3f then
-    return path:gsub(pattern:gsub("/", "[\\/]"), repl)
+  _G.assert((nil ~= repl), "Missing argument repl on fnl/tangerine/utils/path.fnl:22")
+  _G.assert((nil ~= pattern), "Missing argument pattern on fnl/tangerine/utils/path.fnl:22")
+  _G.assert((nil ~= path), "Missing argument path on fnl/tangerine/utils/path.fnl:22")
+  local _3_
+  if win32_3f then
+    _3_ = path:gsub("\\", "/")
   else
-    return path:gsub(pattern, repl)
+    _3_ = path
   end
+  return _3_:gsub(pattern, repl)
 end
 p.shortname = function(path)
   _G.assert((nil ~= path), "Missing argument path on fnl/tangerine/utils/path.fnl:26")
@@ -33,21 +37,36 @@ local function esc_regex(str)
   _G.assert((nil ~= str), "Missing argument str on fnl/tangerine/utils/path.fnl:42")
   return str:gsub("[%%%^%$%(%)%[%]%{%}%.%*%+%-%?]", "%%%1")
 end
-p["transform-path"] = function(path, _3_, _5_)
-  local _arg_4_ = _3_
-  local key1 = _arg_4_[1]
-  local ext1 = _arg_4_[2]
+p["transform-path"] = function(path, _5_, _7_)
   local _arg_6_ = _5_
-  local key2 = _arg_6_[1]
-  local ext2 = _arg_6_[2]
+  local key1 = _arg_6_[1]
+  local ext1 = _arg_6_[2]
+  local _arg_8_ = _7_
+  local key2 = _arg_8_[1]
+  local ext2 = _arg_8_[2]
   _G.assert((nil ~= ext2), "Missing argument ext2 on fnl/tangerine/utils/path.fnl:46")
   _G.assert((nil ~= key2), "Missing argument key2 on fnl/tangerine/utils/path.fnl:46")
   _G.assert((nil ~= ext1), "Missing argument ext1 on fnl/tangerine/utils/path.fnl:46")
   _G.assert((nil ~= key1), "Missing argument key1 on fnl/tangerine/utils/path.fnl:46")
   _G.assert((nil ~= path), "Missing argument path on fnl/tangerine/utils/path.fnl:46")
-  local from = ("^" .. esc_regex(env.get(key1)))
-  local to = esc_regex(env.get(key2))
-  local path0 = path:gsub(("%." .. ext1 .. "$"), ("." .. ext2))
+  local from
+  if win32_3f then
+    from = (("^" .. esc_regex(env.get(key1)))):gsub("\\", "/")
+  else
+    from = ("^" .. esc_regex(env.get(key1)))
+  end
+  local to
+  if win32_3f then
+    to = esc_regex(env.get(key2)):gsub("\\", "/")
+  else
+    to = esc_regex(env.get(key2))
+  end
+  local path0
+  if win32_3f then
+    path0 = path:gsub(("%." .. ext1 .. "$"), ("." .. ext2)):gsub("\\", "/")
+  else
+    path0 = path:gsub(("%." .. ext1 .. "$"), ("." .. ext2))
+  end
   if path0:find(from) then
     return path0:gsub(from, to)
   else
