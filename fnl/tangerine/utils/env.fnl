@@ -31,14 +31,14 @@
 
 (lambda get-type [x]
   "returns type of x, correctly types lists."
-  (if (vim.tbl_islist x)
+  (if (vim.islist x)
       (do "list")
       (type x)))
 
 (lambda table? [tbl scm]
   "checks if 'tbl' is a valid table and 'scm' is not a list."
   (and (= :table (type tbl))
-       (not (vim.tbl_islist scm))))
+       (not (vim.islist scm))))
 
 (lambda deepcopy [tbl1 tbl2]
   "deep copy 'tbl1' onto 'tbl2'."

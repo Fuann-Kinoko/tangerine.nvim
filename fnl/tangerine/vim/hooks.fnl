@@ -58,7 +58,7 @@
 
 (lambda hooks.onsave []
   "runs everytime fennel files in source dirs are saved."
-  (local patterns (vim.tbl_flatten [
+  (local patterns (-> (vim.iter [
     ;; vimrc
     (resolve-file-pattern (env.get :vimrc))
     ;; source directory
@@ -69,7 +69,7 @@
     ;; custom paths
     (map #(.. (resolve-file-pattern $) "*.fnl")
          (icollect [_ [s] (ipairs (env.get :custom))] s))
-  ]))
+  ]) (: :flatten) (: :totable)))
   (augroup :tangerine-onsave
     [[:BufWritePost (table.concat patterns ",")] run-hooks]))
 

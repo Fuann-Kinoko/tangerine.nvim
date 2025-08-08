@@ -6,7 +6,7 @@ local hl_failure = env.get("highlight", "errors")
 local hl_float = env.get("highlight", "float")
 local function empty_3f(list)
   _G.assert((nil ~= list), "Missing argument list on fnl/tangerine/output/logger.fnl:18")
-  if not vim.tbl_islist(list) then
+  if not vim.islist(list) then
     error(("[tangerine]: error in logger, expected 'list' to be a valid list got " .. type(list) .. "."))
   else
   end

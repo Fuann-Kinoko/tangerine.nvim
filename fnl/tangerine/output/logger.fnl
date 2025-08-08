@@ -17,7 +17,7 @@
 ;; -------------------- ;;
 (lambda empty? [list]
   "checks if 'list' is empty."
-  (if (not (vim.tbl_islist list))
+  (if (not (vim.islist list))
       (error (.. "[tangerine]: error in logger, expected 'list' to be a valid list got " (type list) ".")))
   :return
   (= (length list) 0))

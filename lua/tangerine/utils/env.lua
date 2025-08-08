@@ -43,7 +43,7 @@ local function rtpdirs(dirs)
 end
 local function get_type(x)
   _G.assert((nil ~= x), "Missing argument x on fnl/tangerine/utils/env.fnl:32")
-  if vim.tbl_islist(x) then
+  if vim.islist(x) then
     return "list"
   else
     return type(x)
@@ -52,7 +52,7 @@ end
 local function table_3f(tbl, scm)
   _G.assert((nil ~= scm), "Missing argument scm on fnl/tangerine/utils/env.fnl:38")
   _G.assert((nil ~= tbl), "Missing argument tbl on fnl/tangerine/utils/env.fnl:38")
-  return (("table" == type(tbl)) and not vim.tbl_islist(scm))
+  return (("table" == type(tbl)) and not vim.islist(scm))
 end
 local function deepcopy(tbl1, tbl2)
   _G.assert((nil ~= tbl2), "Missing argument tbl2 on fnl/tangerine/utils/env.fnl:43")
