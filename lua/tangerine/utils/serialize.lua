@@ -18,7 +18,7 @@ local function list_3f(x)
 end
 local function tab(n)
   _G.assert((nil ~= n), "Missing argument n on fnl/tangerine/utils/serialize.fnl:22")
-  return ("\n" .. string.rep("\9", n))
+  return ("\n" .. string.rep("\t", n))
 end
 local priority = {number = 1, boolean = 2, string = 3, ["function"] = 4, table = 5, thread = 6, userdata = 7}
 local function compare(x, y)
@@ -151,7 +151,7 @@ local function _13_(parse0, val, level)
   return out
 end
 parse = setmetatable({primitive = nil, list = nil, key = nil, table = nil, metatable = nil, any = _11_}, {__call = _13_})
-local escapes = {["\7"] = "\\a", ["\8"] = "\\b", ["\12"] = "\\f", ["\n"] = "\\n", ["\13"] = "\\r", ["\9"] = "\\t", ["\11"] = "\\v"}
+local escapes = {["\a"] = "\\a", ["\b"] = "\\b", ["\f"] = "\\f", ["\n"] = "\\n", ["\r"] = "\\r", ["\t"] = "\\t", ["\v"] = "\\v"}
 local function double_quote(str)
   _G.assert((nil ~= str), "Missing argument str on fnl/tangerine/utils/serialize.fnl:209")
   local function _15_(_241)

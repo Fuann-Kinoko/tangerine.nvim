@@ -20,7 +20,7 @@ err["compile?"] = function(msg, _3fraw)
   else
     e = "[0-9]+"
   end
-  return toboolean((msg:match(("^[%s\9]*Parse error.*:" .. e)) or msg:match(("^[%s\9]*Compile error.*:" .. e))))
+  return toboolean((msg:match(("^[%s\t]*Parse error.*:" .. e)) or msg:match(("^[%s\t]*Compile error.*:" .. e))))
 end
 err.parse = function(msg, offset)
   _G.assert((nil ~= offset), "Missing argument offset on fnl/tangerine/output/error.fnl:31")
@@ -30,7 +30,7 @@ err.parse = function(msg, offset)
   local shortmsg = ""
   for _, line0 in ipairs(lines) do
     if not err["compile?"](line0, true) then
-      shortmsg = line0:gsub("^[%s\9]+", "")
+      shortmsg = line0:gsub("^[%s\t]+", "")
       break
     else
     end
